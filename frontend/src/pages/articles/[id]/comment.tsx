@@ -22,8 +22,7 @@ export default function CreateComment({ article }) {
                 author: author,
                 content: content
             })
-        })
-
+        }).then(async (response) => {
         console.log(
             JSON.stringify({
                 author: author,
@@ -31,8 +30,13 @@ export default function CreateComment({ article }) {
             })
         )
 
-        setIsMutating(false)
-        await router.push(`/articles/${article.id}`)
+        router.push(`/articles/${article.id}`)
+        }).catch((e) => {
+            alert("Failed to comment")
+            console.log(e)
+        }).finally(() => {
+            setIsMutating(false)
+        })
     }
 
     return (

@@ -101,42 +101,46 @@ export default function ArticleDetail({ article, comments }) {
                     <br/>
                     <div className="container card bg-base-300/75 prose lg:prose-xl max-w-5xl p-7 bg-inherit/75">
                         <h3>Comments</h3>
-                        <div className="p-5">
-                            {comments.map(comment => (
-                                <div className="card bg-zinc-600/50 shadow-xl mx-auto mb-3 max-w-5xl" key={comment.id}>
-                                    <div className="card-body p-7">
-                                        <div className="card-title flex-col items-start content-start">
-                                            <h4 className="!m-0">{comment.author}</h4>
-                                        </div>
-                                        <p className="text-sm !mt-1">{comment.content}</p>
-                                        <div className="card-actions justify-between items-end">
-                                            <h5 className="text-xs opacity-50">{comment.timestamp}</h5>
-                                            <div className="flex gap-3">
-                                                {!isMutating ? (
-                                                    <button
-                                                        type="button"
-                                                        onClick={() => {
-                                                            handleDeleteComment(comment.id)
-                                                        }}
-                                                        className="btn btn-sm btn-error text-white">
-                                                        Delete
-                                                    </button>
-                                                ) : (
-                                                    <button
-                                                        type="button"
-                                                        onClick={() => {
-                                                            handleDeleteComment(comment.id)
-                                                        }}
-                                                        className="btn btn-sm btn-error loading text-white">
-                                                        Delete
-                                                    </button>
-                                                )}
+                        {comments != null ? (
+                            <div className="p-5">
+                                {comments.map(comment => (
+                                    <div className="card bg-zinc-600/50 shadow-xl mx-auto mb-3 max-w-5xl" key={comment.id}>
+                                        <div className="card-body p-7">
+                                            <div className="card-title flex-col items-start content-start">
+                                                <h4 className="!m-0">{comment.author}</h4>
+                                            </div>
+                                            <p className="text-sm !mt-1">{comment.content}</p>
+                                            <div className="card-actions justify-between items-end">
+                                                <h5 className="text-xs opacity-50">{comment.timestamp}</h5>
+                                                <div className="flex gap-3">
+                                                    {!isMutating ? (
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => {
+                                                                handleDeleteComment(comment.id)
+                                                            }}
+                                                            className="btn btn-sm btn-error text-white">
+                                                            Delete
+                                                        </button>
+                                                    ) : (
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => {
+                                                                handleDeleteComment(comment.id)
+                                                            }}
+                                                            className="btn btn-sm btn-error loading text-white">
+                                                            Delete
+                                                        </button>
+                                                    )}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            ))}
-                        </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="p-5 text-center">Unable to load comments</div>
+                        )}
                     </div>
                 </div>
             </div>
@@ -150,10 +154,14 @@ export async function getServerSideProps({params}: {params: {id: number}}) {
     })
     const dataArticle = await fetchArticle.json()
 
-    const fetchComments = await fetch(`http://localhost:8081/api/v1/comment/get-all-comments/${params.id}`, {
+    let dataComments
+    await fetch(`http://localhost:8081/api/v1/comment/get-all-comments/${params.id}`, {
         cache: "no-store",
+    }).then(async (response) => {
+        dataComments = await response.json()
+    }).catch((e) => {
+        dataComments = null
     })
-    const dataComments = await fetchComments.json()
 
     return {
         props: { article: dataArticle, comments: dataComments },
