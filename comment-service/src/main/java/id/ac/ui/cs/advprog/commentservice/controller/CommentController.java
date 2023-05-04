@@ -23,23 +23,27 @@ public class CommentController {
 
     @PostMapping("/create-comment/{postId}")
     public ResponseEntity<Comment> create(@RequestBody CommentRequest commentRequest, @PathVariable Integer postId) {
-        // TODO: Lengkapi kode berikut
-        Comment created = null;
-        if(created != null) {
-            return ResponseEntity.ok(created);
-        } else
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        // TODO DONE: Membuat Comment baru dengan data yang ditentukan
+        Comment response = null;
+        response = commentService.create(commentRequest, postId);
+        if(response != null) {
+            return ResponseEntity.ok(response);
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
 
     @GetMapping("/get-all-comments/{postId}")
     public ResponseEntity<List<Comment>> findAllByPostId(@PathVariable Integer postId) {
-        // TODO: Lengkapi kode berikut
-        return ResponseEntity.ok(null);
+        // TODO DONE: Mengembalikan semua Comment sesuai Id postingan yang ada di database
+        List<Comment> response = null;
+        response = commentService.findAllByPostId(postId);
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/delete-comment/{id}")
     public ResponseEntity<String> delete(@PathVariable Integer id) {
-        // TODO: Lengkapi kode berikut
+        // TODO DONE: Menghapus Comment dengan id yang ditentukan
+        commentService.delete(id);
         return ResponseEntity.ok(String.format("Deleted Comment with id %d", id));
     }
 

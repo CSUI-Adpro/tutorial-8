@@ -24,26 +24,40 @@ public class CommentServiceImpl implements CommentService {
     }
 
     public boolean getPostViaId(Integer postId) {
-        // TODO: Lengkapi kode berikut.
-        // Panggil service article untuk mengecek id article (post) yang bersesuaian
+        // TODO DONE: Panggil service article untuk mengecek id article (post) yang bersesuaian
+        Object post = restTemplate.getForObject("http://localhost:8080/api/v1/article/get-post/" + postId, String.class);
+        if (post != null) {
+            return true;
+        }
         return false;
     }
 
     @Override
     public Comment create(CommentRequest commentRequest, Integer postId) {
+        // TODO DONE NOTED: Membuat Comment baru dengan data yang ditentukan
+        Comment comment = null;
         if(getPostViaId(postId)) {
-            // TODO: Lengkapi kode berikut
-        } return null;
+            comment = new Comment();
+            comment.setAuthor(commentRequest.getAuthor());
+            comment.setContent(commentRequest.getContent());
+            comment.setPostId(postId);
+            comment.setTimestamp(Timestamp.valueOf(LocalDateTime.now()));
+            commentRepository.save(comment);
+        }
+        return comment;
     }
 
     @Override
     public List<Comment> findAllByPostId(Integer postId) {
-        // TODO: Lengkapi kode berikut
-        return null;
+        // TODO DONE: Mengembalikan semua Comment yang ada di database dengan postId yang ditentukan
+        List<Comment> comments = null;
+        comments = commentRepository.findAllByPostId(postId);
+        return comments;
     }
 
     @Override
     public void delete(Integer id) {
-        // TODO: Lengkapi kode berikut
+        // TODO DONE: Menghapus Comment dengan id yang ditentukan
+        commentRepository.deleteById(id);
     }
 }
