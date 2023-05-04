@@ -19,25 +19,32 @@ public class ArticleController {
 
     @GetMapping(path = "/get-all-posts")
     public ResponseEntity<List<Article>> getAllArticles() {
-        // TODO: Lengkapi kode berikut
-        return ResponseEntity.ok(null);
+        // TODO DONE: Mengembalikan semua Article yang ada di database
+        List<Article> response = null;
+        response = articleService.getAllArticles();
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping(path = "/get-post/{id}")
     public ResponseEntity<Article> getArticleById(@PathVariable Integer id) {
-        // TODO: Lengkapi kode berikut
-        return ResponseEntity.ok(null);
+        // TODO DONE: Mengembalikan Article dengan id yang ditentukan
+        Article response = null;
+        response = articleService.findArticleById(id);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping(path = "/create-post")
     public ResponseEntity<Article> createArticle(@RequestBody CreateArticleDTO createArticleDTO) {
-        // TODO: Lengkapi kode berikut
-        return ResponseEntity.ok(null);
+        // TODO DONE: Membuat Article baru dengan data yang ditentukan
+        Article response = null;
+        response = articleService.createArticle(createArticleDTO);
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping(path = "/delete-post/{id}")
     public ResponseEntity<String> deleteArticle(@PathVariable Integer id) {
-        // TODO: Lengkapi kode berikut
+        // TODO DONE: Menghapus Article dengan id yang ditentukan
+        articleService.deleteArticle(id);
         return ResponseEntity.ok(String.format("Deleted Article with id %d", id));
     }
 }
