@@ -16,6 +16,7 @@ public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
     private final RestTemplate restTemplate;
+    private String articleServiceURL = "http://localhost:8080/api/v1/article";
 
     @Autowired
     public CommentServiceImpl(CommentRepository commentRepository, RestTemplate restTemplate) {
@@ -25,8 +26,15 @@ public class CommentServiceImpl implements CommentService {
 
     public boolean getPostViaId(Integer postId) {
         // TODO DONE: Panggil service article untuk mengecek id article (post) yang bersesuaian
-        Object post = restTemplate.getForObject("http://localhost:8080/api/v1/article/get-post/" + postId, String.class);
-        if (post != null) {
+
+        // Mendapatkan object article
+        String endpoint = "/get-post/";
+        Object article = restTemplate.getForObject(
+                String.format("%s%s%s", articleServiceURL, endpoint, postId), String.class
+        );
+
+        // Jika article tidak null, maka return true
+        if (article != null) {
             return true;
         }
         return false;
